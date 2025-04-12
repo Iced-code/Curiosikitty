@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 
 // MAIN PROGRAM EXECUTER
-public class world extends game {
+public class Curiosikitty extends game {
     public static void main(String[] args) {
 
         //makes the game window
