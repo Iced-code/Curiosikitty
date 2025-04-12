@@ -17,7 +17,8 @@ public class enemy {
     private int expDrop = 0;
     private enemy_type enemy;
 
-    private String[] textures = {"assets/sprites/saucey.png", "assets/sprites/fish.png"};
+    private String[] textures = {"assets/sprites/saucey.png", "assets/sprites/knija.png", "assets/sprites/fish.png"};
+    private String expShard = "assets/sprites/gem.bmp";
     private BufferedImage image;
 
     // ENEMY
@@ -49,7 +50,7 @@ public class enemy {
                 this.maxHealth = 5;
                 this.health = 5;
                 this.expDrop = 8;
-                fpath = textures[1];
+                fpath = textures[2];
                 break;
             default:
                 fpath = textures[0];
@@ -125,6 +126,14 @@ public class enemy {
     public void changeHealth(int amount){
         if(health > 0){
             health += amount;
+        }
+        
+        if(health <= 0){
+            File file = new File(expShard);
+        
+            try {
+                this.image = ImageIO.read(file);
+            } catch (Exception e){}
         }
     }
     

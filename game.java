@@ -38,6 +38,7 @@ public class game extends JPanel implements KeyListener
     private ArrayList<Integer> adjacentTiles;
     private int points = 0;
 
+    private boolean onEnemy = false;
 
     public game(){
         this.dimensionX = 11;
@@ -271,7 +272,7 @@ public class game extends JPanel implements KeyListener
         if(c == 'r' || c == 'R'){
             Player.setEXP(0);
             Player.setHealth(5);
-            enemies = (ArrayList<enemy>) Levels.getEnemies().clone();
+            //enemies = (ArrayList<enemy>) Levels.getEnemies().clone();
         }
 
         if(c == 'x' || c == 'X'){
@@ -334,6 +335,20 @@ public class game extends JPanel implements KeyListener
             Player.changeHealth(1);
         }
 
+        if(Levels.getEnemyPosition().contains(Player.getPosition())){
+            if(!onEnemy){
+                Player.changeHealth(-1);
+                onEnemy = true;
+            }
+            else {
+                onEnemy = false;
+            }
+        }
+        else {
+            onEnemy = false;
+        }
+        
+
         repaint();
     }
     @Override
@@ -361,13 +376,14 @@ public class game extends JPanel implements KeyListener
         int count = 0;
         tile curr;
 
+        // ENEMY MOVEMENT
         for(enemy currEnemy : enemies){
             currEnemy.move(getAdjacentTiles(currEnemy.getPosition()), Player.getPosition());
         }
 
         adjacentTiles = getAdjacentTiles(Player.getPosition());
 
-        //MAP DISPLAY
+        // PAINTS LEVEL, ENEMIES, AND PLAYER
         for(int i = 0; i < dimensionY; i++){
             for(int j = 0; j < dimensionX; j++){
                 curr = world_layout.get(count);;
@@ -385,9 +401,9 @@ public class game extends JPanel implements KeyListener
                 }
 
                 if(Player.getPosition() == count && Player.getHealth() > 0){
-                    if(Levels.getEnemyPosition().contains(Player.getPosition())){
+                    /* if(Levels.getEnemyPosition().contains(Player.getPosition())){
                         Player.changeHealth(-1);
-                    }
+                    } */
                     Player.paint(g2, x, y);
                     
                 }
@@ -402,11 +418,13 @@ public class game extends JPanel implements KeyListener
             //y += 47;   // for 16x16
         }
 
+        // PAINTS PLAYER HEALTH BAR AND SCRATCH ATTACKS
         if(Player.getHealth() > 0){
             Player.paintHealth(g2);
             Player.paint_scratch(g2);
         }
 
+        // PAINTS EXP BAR
         g2.setColor(Color.DARK_GRAY);
         g2.fill3DRect(0, 0, 1200, 50, true);
         g2.setColor(Color.CYAN);

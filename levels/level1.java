@@ -48,9 +48,13 @@ public class level1 extends level {
         this.levelPlacements.put(70, new door_tile(0, 2));
         this.levelPlacements.put(71, new door_tile(0, 2));
 
-        // TO ROOM 1
+        // TO ROOM 2
         this.levelPlacements.put(32, new door_tile(2, 33));
         this.levelPlacements.put(43, new door_tile(2, 44));
+
+        // TO ROOM 3
+        this.levelPlacements.put(33, new door_tile(3, 43));
+        this.levelPlacements.put(44, new door_tile(3, 54));
     }
     public HashMap<Integer, tile> getPlacements(){
         return levelPlacements;

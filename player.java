@@ -13,7 +13,7 @@ public class player {
     private int x, y;
     private boolean facingRight = true;
 
-    private int health = 5;
+    private int maxHealth,health;
     private int exp = 0;
     private boolean attack = false;
     private ArrayList<String> inventory;
@@ -27,6 +27,8 @@ public class player {
         this.worldSizeX = worldSizeX;
         this.worldSizeY = worldSizeY;
         this.position = pos;
+        this.maxHealth = 5;
+        this.health = 5;
         this.inventory = new ArrayList<String>();
         
         try {
@@ -115,7 +117,12 @@ public class player {
         health = amount;
     }
     public void changeHealth(int amount){
-        health += amount;
+        if(health <= maxHealth) {
+            health += amount;
+        }
+        else {
+            health = maxHealth;
+        }
     }
 
     // EXP 

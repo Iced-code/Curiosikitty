@@ -18,7 +18,7 @@ public class Curiosikitty extends game {
     public static void main(String[] args) {
 
         //makes the game window
-        JFrame frame = new JFrame("World");
+        JFrame frame = new JFrame("Curiosikitty");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setSize(1210, 805);

@@ -64,6 +64,7 @@ public class levelLoader {
         levels.add(new level0());
         levels.add(new level1());
         levels.add(new level2());
+        levels.add(new level3());
     }
 
     // CURRENT LEVEL LOADING
