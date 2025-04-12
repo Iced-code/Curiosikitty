@@ -67,7 +67,8 @@ public abstract class tile {
         }
         else {
             //g.drawRect(x, y, (length*10)+10, (length*10)+10);
-            g.fillRect(x, y, length, length);
+            //g.fillRect(x, y, length+10, length+5);
+            g.fillRect(x, y, length+5, length);
         }
     }
 

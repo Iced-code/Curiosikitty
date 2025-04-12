@@ -38,7 +38,7 @@ public class level0 extends level {
                             "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L",
                             "L", "L", "L", "L", "L", "L", "L", "B", "X", "L", "L",
                             "L", "L", "L", "L", "L", "L", "L", "X", "L", "L", "X",
-                            "X", "L", "B", "L", "L", "L", "L", "L", "L", "L", "X",
+                            "X", "L", "L", "L", "L", "L", "L", "L", "L", "L", "X",
                             "X", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L",
                             "X", "S", "L", "L", "L", "L", "L", "L", "L", "L", "L" };
         return level;
@@ -47,7 +47,7 @@ public class level0 extends level {
     public void setLevelPlacements() {
         // ENEMIES
         this.levelPlacements.put(29, new battle_tile(enemy_type.SAUCEY));
-        this.levelPlacements.put(46, new battle_tile(enemy_type.FISH));
+        this.levelPlacements.put(11, new battle_tile(enemy_type.FISH));
 
         // TO ROOM 1
         this.levelPlacements.put(2, new door_tile(1, 70));

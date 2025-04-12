@@ -1,12 +1,11 @@
+package enemy;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
 import javax.imageio.ImageIO;
-    
-import enemy.*;
 
-public class enemy {
+public class saucey_enemy {
 
     private int worldSizeX, worldSizeY;
     private int position;
@@ -22,7 +21,7 @@ public class enemy {
     private BufferedImage image;
 
     // ENEMY
-    public enemy(int pos, int worldSizeX, int worldSizeY, enemy_type enemyType){
+    public saucey_enemy(int pos, int worldSizeX, int worldSizeY, enemy_type enemyType){
         this.worldSizeX = worldSizeX;
         this.worldSizeY = worldSizeY;
         this.position = pos;

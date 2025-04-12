@@ -36,7 +36,5 @@ public class Curiosikitty extends game {
         frame.setVisible(true);
 
         frame.addKeyListener(myWorld);
-
-        System.out.println(myWorld);
     }
 }

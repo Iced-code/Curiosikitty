@@ -16,6 +16,8 @@ public class player {
     private int maxHealth,health;
     private int exp = 0;
     private boolean attack = false;
+    private boolean onEnemy = false;
+
     private ArrayList<String> inventory;
     private int steps = 0;
 
@@ -70,7 +72,7 @@ public class player {
         if(facingRight){
             facingRight = false;
             try {
-                this.image_scratch = ImageIO.read(new File(scratch_textures[1]));;
+                this.image_scratch = ImageIO.read(new File(scratch_textures[1]));
             } catch (Exception e){}
         }
     }
@@ -92,7 +94,7 @@ public class player {
         if(facingRight){
             facingRight = false;
             try {
-                this.image_scratch = ImageIO.read(new File(scratch_textures[1]));;
+                this.image_scratch = ImageIO.read(new File(scratch_textures[1]));
             } catch (Exception e){}
         }
         else {
@@ -134,6 +136,14 @@ public class player {
     }
     public void changeEXP(int amount){
         exp += amount;
+    }
+
+    // ON ENEMY 
+    public boolean getOnEnemy(){
+        return onEnemy;
+    }
+    public void setOnEnemy(boolean state){
+        onEnemy = state;
     }
 
     // ATTACK LOGIC

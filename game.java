@@ -38,19 +38,17 @@ public class game extends JPanel implements KeyListener
     private ArrayList<Integer> adjacentTiles;
     private int points = 0;
 
-    private boolean onEnemy = false;
-
     public game(){
         this.dimensionX = 11;
         this.dimensionY = 7;
         this.Levels = new levelLoader(dimensionX, dimensionY);
-        this.Player = new player(25, dimensionX, dimensionY);
+        this.Player = new player(35, dimensionX, dimensionY);
     }
     public game(int dX, int dY){
         this.dimensionX = dX;
         this.dimensionY = dY;
         this.Levels = new levelLoader(dimensionX, dimensionY);
-        this.Player = new player(25, dX, dY);
+        this.Player = new player(35, dX, dY);
     }
 
     // GETS LEVEL, PLAYER ADJACENT TILES, AND ENEMIES
@@ -103,76 +101,76 @@ public class game extends JPanel implements KeyListener
         return tiles;
     }
 
-    /* public ArrayList<Integer> getFullAdjacentTiles(int index){
+    public ArrayList<Integer> getFullAdjacentTiles(int index){
         ArrayList<Integer> tiles = new ArrayList<Integer>();
 
         // CHECK TOP LEFT OPEN
         if((index - dimensionY - 1) >= 0 && (index - dimensionY - 1) % dimensionY >= 0 && (index - dimensionY - 1) % dimensionY >= 0 && (index - dimensionY - 1) % dimensionX != dimensionX-1){
-            tiles.add(index - dimension - 1); 
-        } else {
+            tiles.add(index - dimensionX - 1); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF TOP MIDDLE OPEN
-        if((index - dimension) >= 0 && (index - dimension) % dimension >= 0){
-            tiles.add(index - dimension); 
-        } else {
+        if((index - dimensionX) >= 0 && (index - dimensionX) % dimensionX >= 0){
+            tiles.add(index - dimensionX); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF TOP RIGHT OPEN
-        if((index - dimension + 1) >= 0 && (index - dimension + 1) % dimension >= 0 && (index - dimension + 1) % dimension <= dimension-1 && (index - dimension + 1) % dimension != 0){
-            tiles.add(index - dimension + 1); 
-        } else {
+        if((index - dimensionX + 1) >= 0 && (index - dimensionX + 1) % dimensionX >= 0 && (index - dimensionX + 1) % dimensionX <= dimensionX-1 && (index - dimensionX + 1) % dimensionX != 0){
+            tiles.add(index - dimensionX + 1); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF MIDDLE LEFT OPEN
-        if((index - 1) % dimension >= 0 && (index - 1) % dimension != dimension-1){
+        if((index - 1) % dimensionX >= 0 && (index - 1) % dimensionX != dimensionX-1){
             tiles.add(index - 1); 
-        } else {
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
-        tiles.add(Player.getPosition()); 
+        //tiles.add(Player.getPosition()); 
 
         // CHECK IF MIDDLE RIGHT OPEN
-        if((index + 1) % dimension <= dimension-1 && (index + 1) % dimension != 0){
+        if((index + 1) % dimensionX <= dimensionX-1 && (index + 1) % dimensionX != 0){
             tiles.add(index + 1); 
-        } else {
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF BOTTOM LEFT OPEN
-        if((index + dimension - 1) < (dimension*dimension) && (index + dimension - 1) % dimension >= 0 && (index + dimension - 1) % dimension != dimension-1){
-            tiles.add(index + dimension - 1); 
-        } else {
+        if((index + dimensionX - 1) < (dimensionX*dimensionY) && (index + dimensionX - 1) % dimensionX >= 0 && (index + dimensionX - 1) % dimensionX != dimensionX-1){
+            tiles.add(index + dimensionX - 1); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF BOTTOM MIDDLE OPEN
-        if((index + dimension) < (dimension*dimension)){
-            tiles.add(index + dimension); 
-        } else {
+        if((index + dimensionX) < (dimensionX*dimensionY)){
+            tiles.add(index + dimensionX); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
 
         // CHECK IF BOTTOM RIGHT OPEN
-        if((index + dimension + 1) < (dimension*dimension) && (index + dimension + 1) % dimension >= 0 && (index + dimension + 1) % dimension != 0){
-            tiles.add(index + dimension + 1); 
-        } else {
+        if((index + dimensionX + 1) < (dimensionX*dimensionY) && (index + dimensionX + 1) % dimensionX >= 0 && (index + dimensionX + 1) % dimensionX != 0){
+            tiles.add(index + dimensionX + 1); 
+        }/*  else {
             tiles.add(-1);
-        }
+        } */
         
-        if(tiles.get(0) == -1 && tiles.get(2) == -1){       // UPPER BORDER
+        /* if(tiles.get(0) == -1 && tiles.get(2) == -1){       // UPPER BORDER
 
             for(int i = 0; i < 3; i++) {
                 tiles.remove(tiles.get(0));
             }
 
-            tiles.add(tiles.get(3) + dimension);
-            tiles.add(tiles.get(4) + dimension);
-            tiles.add(tiles.get(5) + dimension);
+            tiles.add(tiles.get(3) + dimensionX);
+            tiles.add(tiles.get(4) + dimensionX);
+            tiles.add(tiles.get(5) + dimensionX);
         }
         else if(tiles.get(6) == -1 && tiles.get(8) == -1){      // BOTTOM BORDER
 
@@ -180,9 +178,9 @@ public class game extends JPanel implements KeyListener
                 tiles.remove(tiles.get(6));
             }
 
-            tiles.add(tiles.get(0) - dimension);
-            tiles.add(tiles.get(1) - dimension);
-            tiles.add(tiles.get(2) - dimension);
+            tiles.add(tiles.get(0) - dimensionX);
+            tiles.add(tiles.get(1) - dimensionX);
+            tiles.add(tiles.get(2) - dimensionX);
         }
         else if(tiles.get(0) == -1 && tiles.get(6) == -1){      // LEFT BORDER
             tiles.remove(tiles.get(0));
@@ -201,10 +199,10 @@ public class game extends JPanel implements KeyListener
             tiles.add(tiles.get(0) - 1);
             tiles.add(tiles.get(2) - 1);
             tiles.add(tiles.get(4) - 1);
-        }
+        } */
 
         return tiles;
-    } */
+    }
 
     /*
     public boolean pointsAvailable(){
@@ -336,18 +334,17 @@ public class game extends JPanel implements KeyListener
         }
 
         if(Levels.getEnemyPosition().contains(Player.getPosition())){
-            if(!onEnemy){
+            if(!Player.getOnEnemy()){
                 Player.changeHealth(-1);
-                onEnemy = true;
+                Player.setOnEnemy(true);
             }
             else {
-                onEnemy = false;
+                Player.setOnEnemy(false);
             }
         }
         else {
-            onEnemy = false;
+            Player.setOnEnemy(false);
         }
-        
 
         repaint();
     }
@@ -405,7 +402,6 @@ public class game extends JPanel implements KeyListener
                         Player.changeHealth(-1);
                     } */
                     Player.paint(g2, x, y);
-                    
                 }
 
                 x += 100; // for 8x8
@@ -417,6 +413,19 @@ public class game extends JPanel implements KeyListener
             y += 95;    // for 8x8
             //y += 47;   // for 16x16
         }
+
+        /* if(Levels.getEnemyPosition().contains(Player.getPosition())){
+            if(!Player.getOnEnemy()){
+                Player.changeHealth(-1);
+                Player.setOnEnemy(true);
+            }
+            else {
+                Player.setOnEnemy(false);
+            }
+        }
+        else {
+            Player.setOnEnemy(false);
+        } */
 
         // PAINTS PLAYER HEALTH BAR AND SCRATCH ATTACKS
         if(Player.getHealth() > 0){

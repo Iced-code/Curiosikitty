@@ -14,7 +14,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 
-import enemy.enemy_type;
+import enemy.*;
 import levels.*;
 import tiles.*;
 
