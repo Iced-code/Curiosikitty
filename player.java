@@ -16,7 +16,7 @@ public class player {
     private int maxHealth,health;
     private int exp = 0;
     private boolean attack = false;
-    private boolean onEnemy = false;
+    private int onEnemy = 0;
 
     private ArrayList<String> inventory;
     private int steps = 0;
@@ -30,7 +30,7 @@ public class player {
         this.worldSizeY = worldSizeY;
         this.position = pos;
         this.maxHealth = 5;
-        this.health = 5;
+        this.health = maxHealth;
         this.inventory = new ArrayList<String>();
         
         try {
@@ -139,11 +139,14 @@ public class player {
     }
 
     // ON ENEMY 
-    public boolean getOnEnemy(){
+    public int getOnEnemy(){
         return onEnemy;
     }
-    public void setOnEnemy(boolean state){
-        onEnemy = state;
+    public void setOnEnemy(int state){
+        onEnemy += state;
+    }
+    public void setOnEnemy(){
+        onEnemy = 3;
     }
 
     // ATTACK LOGIC

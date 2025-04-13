@@ -111,8 +111,9 @@ public class enemy {
     }
     public void move(ArrayList<Integer> spaces, int playerPos){
         int weight = 6;
+        int roll = (int)(Math.random() * weight);
         
-        if((int)(Math.random() * weight) == 2){
+        if(roll == 2){
             spaces.sort(null);
 
             if(enemy.equals(enemy_type.FISH)){

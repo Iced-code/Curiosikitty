@@ -41,8 +41,7 @@ public class game extends JPanel implements KeyListener, MouseListener
     private int points = 0;
 
     private Point mouse;
-    private int mouseX, mouseY;
-    private int mousePosition;
+    private int mouseX, mouseY, mousePosition;
 
     public game(){
         this.dimensionX = 11;
@@ -57,22 +56,6 @@ public class game extends JPanel implements KeyListener, MouseListener
         this.dimensionY = dY;
         this.Levels = new levelLoader(dimensionX, dimensionY);
         this.Player = new player(35, dX, dY);
-    }
-
-    public int mouseIndex(){
-        this.mouse = MouseInfo.getPointerInfo().getLocation();
-        this.mouseX = (int)mouse.getX();
-        this.mouseY = (int)mouse.getY();
-        int index = (int) (Math.min(Math.max(0,Math.ceil((mouseX - 410)/100.0)), 10) + Math.min(Math.max(0,Math.ceil((mouseY - 240)/100.0))*11, 66));
-
-        if(index % 11 < 5){
-            Player.faceLeft();
-        }
-        else {
-            Player.faceRight();
-        }
-
-        return index;
     }
 
     // GETS LEVEL, PLAYER ADJACENT TILES, AND ENEMIES
@@ -411,7 +394,12 @@ public class game extends JPanel implements KeyListener, MouseListener
                 curr = world_layout.get(count);;
                 g2.setColor(curr.getColor());
 
-                if(count == mouseIndex()) g2.setColor(g2.getColor().darker());
+                if(count == mouseIndex()) {
+                    g2.setColor(g2.getColor().darker());
+                }
+                else if(selected.contains(count) && count == Player.getPosition()) {
+                    g2.setColor(Color.CYAN);
+                }
 
                 curr.paint(g2, x, y, 90);
 
@@ -425,6 +413,7 @@ public class game extends JPanel implements KeyListener, MouseListener
                     /* if(Levels.getEnemyPosition().contains(Player.getPosition())){
                         Player.changeHealth(-1);
                     } */
+                    
                     Player.paint(g2, x, y);
                 }
 
@@ -435,6 +424,13 @@ public class game extends JPanel implements KeyListener, MouseListener
             y += 95;
         }
 
+        if(Levels.getEnemyPosition().contains(Player.getPosition())){
+            if(Player.getOnEnemy() == 3) Player.changeHealth(-1);
+            Player.setOnEnemy(-1);
+        }
+        else {
+            Player.setOnEnemy();
+        }
         // PAINTS PLAYER HEALTH BAR AND SCRATCH ATTACKS
         if(Player.getHealth() > 0){
             Player.paintHealth(g2);
@@ -473,48 +469,76 @@ public class game extends JPanel implements KeyListener, MouseListener
 
         return result;
     }
-    @Override
-    public void mouseClicked(MouseEvent e) {}
 
-        
+    public int mouseIndex(){
+        this.mouse = MouseInfo.getPointerInfo().getLocation();
+        this.mouseX = (int)mouse.getX();
+        this.mouseY = (int)mouse.getY();
+        int index = (int) (Math.min(Math.max(0,Math.ceil((mouseX - 410)/100.0)), 10) + Math.min(Math.max(0,Math.ceil((mouseY - 240)/100.0))*11, 66));
+
+        if(index % 11 < Player.getPosition() % 11){
+            Player.faceLeft();
+        }
+        else if(index % 11 > Player.getPosition() % 11){
+            Player.faceRight();
+        }
+
+        return index;
+    }
+
+    private ArrayList<Integer> selected = new ArrayList<Integer>();
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}   
     @Override
     public void mousePressed(MouseEvent e) {
         mousePosition = mouseIndex();
         ArrayList<Integer> spaces;
 
+        selected.add(mouseIndex());
+
         //System.out.println("mouse: " + mousePosition);
         
-        if(Levels.getEnemyPosition().contains(mousePosition)){
-            Iterator<enemy> eIterator = enemies.iterator();
-            Player.attack(true);
+        if(Player.getHealth() > 0){
+            if(Levels.getEnemyPosition().contains(mousePosition)){
+                Iterator<enemy> eIterator = enemies.iterator();
+                Player.attack(true);
 
-            while(eIterator.hasNext()){
-                enemy currEnemy = eIterator.next();
-                System.out.println("enemy: " + currEnemy.getPosition());
+                while(eIterator.hasNext()){
+                    enemy currEnemy = eIterator.next();
+                    //System.out.println("enemy: " + currEnemy.getPosition());
 
-                if(currEnemy.getPosition() == mousePosition){
-                    spaces = getAdjacentTiles(currEnemy.getPosition());
-                    Player.setPosition(spaces.get((int)Math.random() * spaces.size()));
+                    if(currEnemy.getPosition() == mousePosition){
+                        spaces = getAdjacentTiles(currEnemy.getPosition());
+                        Player.setPosition(spaces.get((int)Math.random() * spaces.size()));
 
-                    currEnemy.changeHealth(-1);
-                    if(currEnemy.getHealth() <= 0){
-                        Player.changeEXP(currEnemy.getEXP());
-                        eIterator.remove();    
+                        currEnemy.changeHealth(-1);
+                        if(currEnemy.getHealth() <= 0){
+                            Player.changeEXP(currEnemy.getEXP());
+                            eIterator.remove();    
+                        }
                     }
                 }
+                repaint();
             }
-            repaint();
-        }
-        else if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
-            changeRoom();
-        }
-        else if(!Levels.tileValueEqual(mousePosition, tile_type.WALL)){
-            Player.setPosition(mousePosition);
+            else if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
+                changeRoom();
+            }
+            else if(!Levels.tileValueEqual(mousePosition, tile_type.WALL)){
+                Player.setPosition(mousePosition);
+            }
         }
     }
     @Override
     public void mouseReleased(MouseEvent e) {
         Player.attack(false);
+        
+        selected.add(mouseIndex());
+        if(!Levels.tileValueEqual(selected.get(selected.size()-1), tile_type.WALL) && !Levels.getEnemyPosition().contains(selected.get(selected.size()-1))){
+            Player.setPosition(selected.get(selected.size()-1));
+        }
+        repaint();
+        selected.clear();
     }
     @Override
     public void mouseEntered(MouseEvent e) {}

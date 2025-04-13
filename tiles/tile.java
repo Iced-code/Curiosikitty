@@ -63,12 +63,12 @@ public abstract class tile {
 
     public void paint(Graphics g, int x, int y, int length){
          if(image != null){
-            g.drawImage(image, x-5, y-5, null);
+            g.drawImage(image, x, y, null);
         }
         else {
             //g.drawRect(x, y, (length*10)+10, (length*10)+10);
             //g.fillRect(x, y, length+10, length+5);
-            g.fillRect(x, y, length+5, length);
+            g.fillRect(x, y, length+10, length+5);
         }
     }
 

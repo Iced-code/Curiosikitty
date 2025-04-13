@@ -36,8 +36,8 @@ public class level1 extends level {
         String[] level = {  "X", "X", "X", "X", "X", "X", "X", "X", "L", "L", "X",
                             "X", "X", "L", "L", "L", "B", "L", "X", "L", "B", "X",
                             "X", "X", "L", "L", "L", "L", "B", "X", "L", "L", "D",
-                            "D", "L", "L", "L", "L", "L", "L", "D", "L", "L", "D",
-                            "D", "L", "L", "L", "L", "L", "L", "D", "L", "L", "X",
+                            "D", "L", "L", "L", "L", "L", "L", "L", "L", "L", "D",
+                            "D", "L", "L", "L", "L", "L", "L", "L", "L", "L", "X",
                             "X", "L", "B", "L", "L", "L", "X", "X", "L", "L", "X",
                             "X", "X", "X", "X", "D", "D", "X", "X", "L", "B", "X" };
         return level;
