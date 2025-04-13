@@ -17,6 +17,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.text.PlainDocument;
 
 import java.util.*;
 import java.util.Timer;
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 
 // MAIN GAME LOGIC
@@ -63,6 +65,13 @@ public class game extends JPanel implements KeyListener, MouseListener
         this.mouseY = (int)mouse.getY();
         int index = (int) (Math.min(Math.max(0,Math.ceil((mouseX - 410)/100.0)), 10) + Math.min(Math.max(0,Math.ceil((mouseY - 240)/100.0))*11, 66));
 
+        if(index % 11 < 5){
+            Player.faceLeft();
+        }
+        else {
+            Player.faceRight();
+        }
+
         return index;
     }
 
@@ -79,8 +88,11 @@ public class game extends JPanel implements KeyListener, MouseListener
 
     // HANDLES SWITCHING BETWEEN LEVELS
     public void changeRoom(){
-        if(Levels.tileValueEqual(Player.getPosition(), tile_type.DOOR)){
-            door_tile D = (door_tile)world_layout.get(Player.getPosition());
+        /* if(Levels.tileValueEqual(Player.getPosition(), tile_type.DOOR)){
+            door_tile D = (door_tile)world_layout.get(Player.getPosition()); */
+
+        if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
+                door_tile D = (door_tile)world_layout.get(mousePosition);
             Levels.setWorld(D.getNextRoom());
             Player.setPosition(D.getPlayerRoomSpawn());
             makeWorld();
@@ -285,16 +297,6 @@ public class game extends JPanel implements KeyListener, MouseListener
         if(c == 'r' || c == 'R'){
             Player.setEXP(0);
             Player.setHealth(5);
-            //enemies = (ArrayList<enemy>) Levels.getEnemies().clone();
-        }
-
-        if(c == 'x' || c == 'X'){
-            /* mouse = MouseInfo.getPointerInfo().getLocation();
-            mouseX = (int)mouse.getX();
-            mouseY = (int)mouse.getY();
-
-            System.out.println(mouseX + "  " + mouseY + "  " + mouseIndex()); */
-            //System.out.println(Levels.getLevel().getPlacements());
         }
     }
 
@@ -472,15 +474,24 @@ public class game extends JPanel implements KeyListener, MouseListener
         return result;
     }
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {}
+
+        
+    @Override
+    public void mousePressed(MouseEvent e) {
         mousePosition = mouseIndex();
         ArrayList<Integer> spaces;
+
+        //System.out.println("mouse: " + mousePosition);
         
         if(Levels.getEnemyPosition().contains(mousePosition)){
             Iterator<enemy> eIterator = enemies.iterator();
+            Player.attack(true);
 
             while(eIterator.hasNext()){
                 enemy currEnemy = eIterator.next();
+                System.out.println("enemy: " + currEnemy.getPosition());
+
                 if(currEnemy.getPosition() == mousePosition){
                     spaces = getAdjacentTiles(currEnemy.getPosition());
                     Player.setPosition(spaces.get((int)Math.random() * spaces.size()));
@@ -490,20 +501,25 @@ public class game extends JPanel implements KeyListener, MouseListener
                         Player.changeEXP(currEnemy.getEXP());
                         eIterator.remove();    
                     }
-                    repaint();
                 }
             }
+            repaint();
+        }
+        else if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
+            changeRoom();
+        }
+        else if(!Levels.tileValueEqual(mousePosition, tile_type.WALL)){
+            Player.setPosition(mousePosition);
         }
     }
-
-        
     @Override
-    public void mousePressed(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        Player.attack(false);
+    }
     @Override
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
+    
 }
 

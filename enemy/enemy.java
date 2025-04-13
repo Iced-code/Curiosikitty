@@ -110,7 +110,7 @@ public class enemy {
         return pos;
     }
     public void move(ArrayList<Integer> spaces, int playerPos){
-        int weight = 4;
+        int weight = 6;
         
         if((int)(Math.random() * weight) == 2){
             spaces.sort(null);

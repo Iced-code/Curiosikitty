@@ -45,6 +45,6 @@ public class Curiosikitty extends game {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable task = () -> myWorld.repaint();
         // Schedule the task to run every 2 seconds with no initial delay
-        executor.scheduleAtFixedRate(task, 0, 250, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(task, 0, 150, TimeUnit.MILLISECONDS);
     }
 }
