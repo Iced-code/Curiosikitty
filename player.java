@@ -186,7 +186,7 @@ public class player {
 
         //g.setColor(Color.GREEN);
         g.setColor(new Color(Math.min(225, 255-(health*10)), Math.min(255, health*51), 0));
-        g.fillRect(x, y+95, Math.min(90, 18*health), 20);
+        g.fillRect(x, y+95, Math.min(95, 20*health), 20);
     }
 
     // PAINTS SCRATCH ATTACK

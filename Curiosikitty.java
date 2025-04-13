@@ -11,6 +11,9 @@ import java.util.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 // MAIN PROGRAM EXECUTER
@@ -26,7 +29,7 @@ public class Curiosikitty extends game {
         frame.setLayout(null);
 
         //makes the game
-        game myWorld = new game(11,7);
+        game myWorld = new game();
         myWorld.makeWorld();
         
         myWorld.setSize(1210, 805);
@@ -36,5 +39,12 @@ public class Curiosikitty extends game {
         frame.setVisible(true);
 
         frame.addKeyListener(myWorld);
+        frame.addMouseListener(myWorld);
+
+        
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> myWorld.repaint();
+        // Schedule the task to run every 2 seconds with no initial delay
+        executor.scheduleAtFixedRate(task, 0, 250, TimeUnit.MILLISECONDS);
     }
 }

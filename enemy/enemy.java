@@ -88,6 +88,7 @@ public class enemy {
     public int calcPos(int posA, int posB, ArrayList<Integer> availableTiles){
         int pos = position;
 
+        // MOVING DOWN
         if(posA <= posB){
             for(Integer i : availableTiles){
                 if(i >= posA && i <= posB && i > pos){
@@ -95,9 +96,11 @@ public class enemy {
                 }
             }
         }
+
+        //MOVING UP
         if(posA >= posB){
             for(Integer i : availableTiles){
-                if((i <= posA && i >= posB && i < pos)/*  || (i % worldSizeX <= pos % worldSizeX) */){
+                if((i <= posA && i < pos)/*  || (i % worldSizeX <= pos % worldSizeX) */){
                     pos = i;
                 }
             }
@@ -154,11 +157,11 @@ public class enemy {
     // PAINTS ENEMY HEALTH BAR
     public void paintHealth(Graphics g, int x, int y){
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(x, y-20, 90, 20);
+        g.fillRect(x, y-20, 95, 20);
 
         //g.setColor(Color.GREEN);
         g.setColor(new Color(Math.max(255, 255-(health*75)), Math.min(255, health*75), 0));
-        g.fillRect(x, y-20, Math.min(90, 30*health), 20);
+        g.fillRect(x, y-20, Math.min(95, 30*health), 20);
     }
 
     // PAINTS ENEMY

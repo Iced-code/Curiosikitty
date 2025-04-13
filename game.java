@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 
 // MAIN GAME LOGIC
-public class game extends JPanel implements KeyListener
+public class game extends JPanel implements KeyListener, MouseListener
 {
     private int dimensionX, dimensionY;
     private ArrayList<tile> world_layout = new ArrayList<>();
@@ -38,17 +38,32 @@ public class game extends JPanel implements KeyListener
     private ArrayList<Integer> adjacentTiles;
     private int points = 0;
 
+    private Point mouse;
+    private int mouseX, mouseY;
+    private int mousePosition;
+
     public game(){
         this.dimensionX = 11;
         this.dimensionY = 7;
         this.Levels = new levelLoader(dimensionX, dimensionY);
         this.Player = new player(35, dimensionX, dimensionY);
+
+        this.mousePosition = mouseIndex();
     }
     public game(int dX, int dY){
         this.dimensionX = dX;
         this.dimensionY = dY;
         this.Levels = new levelLoader(dimensionX, dimensionY);
         this.Player = new player(35, dX, dY);
+    }
+
+    public int mouseIndex(){
+        this.mouse = MouseInfo.getPointerInfo().getLocation();
+        this.mouseX = (int)mouse.getX();
+        this.mouseY = (int)mouse.getY();
+        int index = (int) (Math.min(Math.max(0,Math.ceil((mouseX - 410)/100.0)), 10) + Math.min(Math.max(0,Math.ceil((mouseY - 240)/100.0))*11, 66));
+
+        return index;
     }
 
     // GETS LEVEL, PLAYER ADJACENT TILES, AND ENEMIES
@@ -274,7 +289,12 @@ public class game extends JPanel implements KeyListener
         }
 
         if(c == 'x' || c == 'X'){
-            System.out.println(Levels.getLevel().getPlacements());
+            /* mouse = MouseInfo.getPointerInfo().getLocation();
+            mouseX = (int)mouse.getX();
+            mouseY = (int)mouse.getY();
+
+            System.out.println(mouseX + "  " + mouseY + "  " + mouseIndex()); */
+            //System.out.println(Levels.getLevel().getPlacements());
         }
     }
 
@@ -334,7 +354,9 @@ public class game extends JPanel implements KeyListener
         }
 
         if(Levels.getEnemyPosition().contains(Player.getPosition())){
-            if(!Player.getOnEnemy()){
+            Player.changeHealth(-1);
+        }
+            /* if(!Player.getOnEnemy()){
                 Player.changeHealth(-1);
                 Player.setOnEnemy(true);
             }
@@ -344,7 +366,7 @@ public class game extends JPanel implements KeyListener
         }
         else {
             Player.setOnEnemy(false);
-        }
+        } */
 
         repaint();
     }
@@ -376,6 +398,7 @@ public class game extends JPanel implements KeyListener
         // ENEMY MOVEMENT
         for(enemy currEnemy : enemies){
             currEnemy.move(getAdjacentTiles(currEnemy.getPosition()), Player.getPosition());
+            //currEnemy.move(getAdjacentTiles(currEnemy.getPosition()), mousePosition);
         }
 
         adjacentTiles = getAdjacentTiles(Player.getPosition());
@@ -385,12 +408,11 @@ public class game extends JPanel implements KeyListener
             for(int j = 0; j < dimensionX; j++){
                 curr = world_layout.get(count);;
                 g2.setColor(curr.getColor());
-                
-                //g.drawRect(x+5, y+5, (dimension*10), (dimension*10)); // for 8x8  
-                //g.fillRect(x, y, (dimension*10) + 10, (dimension*10) + 10);   // for 8x8 full tile
-                //g.fillRect(x, y, (dimension*2) + 13, (dimension*2) + 13);   // for 16x6
+
+                if(count == mouseIndex()) g2.setColor(g2.getColor().darker());
 
                 curr.paint(g2, x, y, 90);
+
                 for(enemy e : enemies){
                     if(e.getPosition() == count){
                         e.paint(g2, x, y);
@@ -404,28 +426,12 @@ public class game extends JPanel implements KeyListener
                     Player.paint(g2, x, y);
                 }
 
-                x += 100; // for 8x8
-                //x += 50;    // for 16x6
+                x += 100;
                 count++;
             }
-            //x = 150;
             x = 50;
-            y += 95;    // for 8x8
-            //y += 47;   // for 16x16
+            y += 95;
         }
-
-        /* if(Levels.getEnemyPosition().contains(Player.getPosition())){
-            if(!Player.getOnEnemy()){
-                Player.changeHealth(-1);
-                Player.setOnEnemy(true);
-            }
-            else {
-                Player.setOnEnemy(false);
-            }
-        }
-        else {
-            Player.setOnEnemy(false);
-        } */
 
         // PAINTS PLAYER HEALTH BAR AND SCRATCH ATTACKS
         if(Player.getHealth() > 0){
@@ -465,5 +471,39 @@ public class game extends JPanel implements KeyListener
 
         return result;
     }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        mousePosition = mouseIndex();
+        ArrayList<Integer> spaces;
+        
+        if(Levels.getEnemyPosition().contains(mousePosition)){
+            Iterator<enemy> eIterator = enemies.iterator();
+
+            while(eIterator.hasNext()){
+                enemy currEnemy = eIterator.next();
+                if(currEnemy.getPosition() == mousePosition){
+                    spaces = getAdjacentTiles(currEnemy.getPosition());
+                    Player.setPosition(spaces.get((int)Math.random() * spaces.size()));
+
+                    currEnemy.changeHealth(-1);
+                    if(currEnemy.getHealth() <= 0){
+                        Player.changeEXP(currEnemy.getEXP());
+                        eIterator.remove();    
+                    }
+                    repaint();
+                }
+            }
+        }
+    }
+
+        
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
 
