@@ -394,12 +394,19 @@ public class game extends JPanel implements KeyListener, MouseListener
                 curr = world_layout.get(count);;
                 g2.setColor(curr.getColor());
 
-                if(count == mouseIndex()) {
+                /* if(count == mouseIndex()) {
+                    g2.setColor(g2.getColor().darker());
+                } */
+                if(selected.size() > 0) {
+                    if(selected.get(0) == count && !Levels.tileValueEqual(count, tile_type.WALL)) g2.setColor(Color.CYAN);
+                    else if(count == mouseIndex() && !Levels.tileValueEqual(count, tile_type.WALL)) { g2.setColor(Color.ORANGE); }
+                }
+                else if(count == mouseIndex()) {
                     g2.setColor(g2.getColor().darker());
                 }
-                else if(selected.contains(count) && count == Player.getPosition()) {
+                /* if(selected.contains(count) && count == Player.getPosition()) {
                     g2.setColor(Color.CYAN);
-                }
+                } */
 
                 curr.paint(g2, x, y, 90);
 
@@ -431,6 +438,11 @@ public class game extends JPanel implements KeyListener, MouseListener
         else {
             Player.setOnEnemy();
         }
+
+        if(Levels.tileValueEqual(Player.getPosition(), tile_type.SHOP)){
+            Player.changeHealth(1);
+        }
+
         // PAINTS PLAYER HEALTH BAR AND SCRATCH ATTACKS
         if(Player.getHealth() > 0){
             Player.paintHealth(g2);
@@ -521,12 +533,12 @@ public class game extends JPanel implements KeyListener, MouseListener
                 }
                 repaint();
             }
-            else if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
+            /* else if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
                 changeRoom();
             }
             else if(!Levels.tileValueEqual(mousePosition, tile_type.WALL)){
                 Player.setPosition(mousePosition);
-            }
+            } */
         }
     }
     @Override
@@ -534,9 +546,16 @@ public class game extends JPanel implements KeyListener, MouseListener
         Player.attack(false);
         
         selected.add(mouseIndex());
-        if(!Levels.tileValueEqual(selected.get(selected.size()-1), tile_type.WALL) && !Levels.getEnemyPosition().contains(selected.get(selected.size()-1))){
+        if(Levels.tileValueEqual(mousePosition, tile_type.DOOR)){
+            changeRoom();
+        }
+        else if(!Levels.tileValueEqual(selected.get(selected.size()-1), tile_type.WALL) && !Levels.getEnemyPosition().contains(selected.get(selected.size()-1))){
             Player.setPosition(selected.get(selected.size()-1));
         }
+        else if(!Levels.tileValueEqual(mousePosition, tile_type.WALL)){
+            Player.setPosition(mousePosition);
+        }
+        
         repaint();
         selected.clear();
     }
